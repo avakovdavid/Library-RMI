@@ -10,14 +10,14 @@ public class Comment {
 	private final Date date; 
 	private final String content;
 	private Optional<Integer> mark = Optional.empty();
-	private final User person;
+	private final Client person;
 	
 	/**
 	 * Instantiates a new Comment
 	 * @param content the message to post
 	 * @param user the owner of the message
 	 */
-	public Comment(String content, User person) {
+	public Comment(String content, Client person) {
 		this.date = new Date(System.currentTimeMillis());
 		this.content = Objects.requireNonNull(content);
 		this.person = Objects.requireNonNull(person);
@@ -29,7 +29,7 @@ public class Comment {
 	 * @param content the message to post
 	 * @param user the owner of the message
 	 */
-	public Comment(int mark, String content, User person) {
+	public Comment(int mark, String content, Client person) {
 		if (mark < 0 || mark > 5) {
 			throw new IllegalStateException("Mark must be between 0 and 5 whereas mark = " + mark);
 		}

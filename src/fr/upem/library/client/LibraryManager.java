@@ -22,7 +22,7 @@ public class LibraryManager extends UnicastRemoteObject implements LibraryObserv
 	/**
 	 * The list containing all subscribers
 	 */
-	private final List<User> users = new ArrayList<User>();
+	private final List<Client> users = new ArrayList<Client>();
 
 	// singleton
 	private static LibraryManager libraryManager;
@@ -47,18 +47,18 @@ public class LibraryManager extends UnicastRemoteObject implements LibraryObserv
 	}
 
 	@Override
-	public void subscribe(User user) {
+	public void subscribe(Client user) {
 		this.users.add(user);
 	}
 
 	@Override
-	public void unsubscribe(User user) {
+	public void unsubscribe(Client user) {
 		this.users.remove(user);
 	}
 
 	@Override
 	public void notifyUsers() throws RemoteException {
-		for (User user : this.users) {
+		for (Client user : this.users) {
 			user.updateBooksStatus();
 		}
 	}
@@ -104,12 +104,12 @@ public class LibraryManager extends UnicastRemoteObject implements LibraryObserv
 	}
 
 	@Override 
-	public void removeNotifications(User user) throws RemoteException {
+	public void removeNotifications(Client user) throws RemoteException {
 		user.clearNotifications();
 	}
 	
 	@Override
-	public HashMap<Long, String> getNotifications(User user) throws RemoteException {
+	public HashMap<Long, String> getNotifications(Client user) throws RemoteException {
 		return user.getNotifications();
 	}
 
@@ -122,7 +122,7 @@ public class LibraryManager extends UnicastRemoteObject implements LibraryObserv
 	 * @param user the user that will wait
 	 * @throws RemoteException 
 	 */
-	public void addUser(ElementReference elementReference, User user) throws RemoteException {
+	public void addUser(ElementReference elementReference, Client user) throws RemoteException {
 		this.library.addUser(elementReference, user);
 	}
 
@@ -132,7 +132,7 @@ public class LibraryManager extends UnicastRemoteObject implements LibraryObserv
 	 * @param user the user that stopped waiting
 	 * @throws RemoteException 
 	 */
-	void removeUser(ElementReference elementReference, User user) throws RemoteException {
+	void removeUser(ElementReference elementReference, Client user) throws RemoteException {
 		this.library.removeUser(elementReference, user);
 	}
 
@@ -144,7 +144,7 @@ public class LibraryManager extends UnicastRemoteObject implements LibraryObserv
 	 * @throws RemoteException 
 	 * @throws IllegalArgumentException 
 	 */
-	Optional<Element> borrowElement(ElementReference elementReference, User user) throws IllegalArgumentException, RemoteException {
+	Optional<Element> borrowElement(ElementReference elementReference, Client user) throws IllegalArgumentException, RemoteException {
 		return this.library.borrowElement(elementReference, user);
 	}
 
@@ -156,7 +156,7 @@ public class LibraryManager extends UnicastRemoteObject implements LibraryObserv
 	 * @return the element borrowed
 	 * @throws RemoteException 
 	 */
-	Optional<Element> borrowElement(long date, ElementReference elementReference, User user) throws RemoteException {
+	Optional<Element> borrowElement(long date, ElementReference elementReference, Client user) throws RemoteException {
 		return this.library.borrowElement(date, elementReference,  user);
 	}
 

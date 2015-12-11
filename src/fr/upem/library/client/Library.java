@@ -83,7 +83,7 @@ public class Library {
 	 * @param user the user to add
 	 * @throws RemoteException 
 	 */
-	void addUser(ElementReference elementReference, User user) throws RemoteException {
+	void addUser(ElementReference elementReference, Client user) throws RemoteException {
 		Objects.requireNonNull(elementReference);
 		Objects.requireNonNull(user);
 		ElementManager elementManager = this.elements.get(elementReference);
@@ -98,7 +98,7 @@ public class Library {
 	 * @param user
 	 * @throws RemoteException 
 	*/
-	void removeUser(ElementReference elementReference, User user) throws RemoteException {
+	void removeUser(ElementReference elementReference, Client user) throws RemoteException {
 		Objects.requireNonNull(elementReference);
 		Objects.requireNonNull(user);
 		ElementManager elementManager = this.elements.get(elementReference);
@@ -115,7 +115,7 @@ public class Library {
 	 * @throws IllegalArgumentException
 	 * @throws RemoteException 
 	 */
-	Optional<Element> borrowElement(ElementReference elementReference, User user) throws IllegalArgumentException, RemoteException{
+	Optional<Element> borrowElement(ElementReference elementReference, Client user) throws IllegalArgumentException, RemoteException{
 		Objects.requireNonNull(elementReference);
 		Objects.requireNonNull(user);
 		ElementManager elementManager = this.elements.get(elementReference); // must always be non null 
@@ -134,7 +134,7 @@ public class Library {
 	 * @throws RemoteException 
 	 * @throws IllegalArgumentException
 	 */
-	Optional<Element> borrowElement(long date, ElementReference elementReference, User user) throws RemoteException {
+	Optional<Element> borrowElement(long date, ElementReference elementReference, Client user) throws RemoteException {
 		Objects.requireNonNull(elementReference);
 		Objects.requireNonNull(user);
 		ElementManager elementManager = this.elements.get(elementReference); // must always be non null 

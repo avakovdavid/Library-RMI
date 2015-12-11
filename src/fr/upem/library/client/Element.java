@@ -17,7 +17,7 @@ public class Element {
 	private static final long YEAR = 31556926000L;
 	
 	private final ElementReference reference;
-	private final TreeMap<Long, User> borrowers; // date d'emprunt
+	private final TreeMap<Long, Client> borrowers; // date d'emprunt
 	private final long purchaseDate; // date d'achat
 	private AtomicBoolean available = new AtomicBoolean(true);
 	private AtomicBoolean late = new AtomicBoolean(false);
@@ -29,7 +29,7 @@ public class Element {
 	Element(long purchaseDate, ElementReference reference) {
 		this.reference = Objects.requireNonNull(reference);
 		this.purchaseDate = purchaseDate;
-		this.borrowers = new TreeMap<Long, User>();
+		this.borrowers = new TreeMap<Long, Client>();
 		this.id = ID++;
 	}
 	
@@ -38,7 +38,7 @@ public class Element {
 	 * @param user the user that borrows
 	 * @throws RemoteException 
 	 */
-	public void borrowByUser(User user) throws RemoteException {
+	public void borrowByUser(Client user) throws RemoteException {
 		if (!this.available.get()) {
 			throw new IllegalStateException("The element : " + this.getInfo() + " is already borrowed");
 		}
@@ -53,7 +53,7 @@ public class Element {
 	 * @param user the user that borrows
 	 * @throws RemoteException 
 	 */
-	public void borrowByUser(long date, User user) throws RemoteException {
+	public void borrowByUser(long date, Client user) throws RemoteException {
 		if (!this.available.get()) {
 			throw new IllegalStateException("The element : " + this.getInfo()  + " is already borrowed");
 		}
@@ -132,7 +132,7 @@ public class Element {
 	/**
 	 * @return the borrowers
 	 */
-	public TreeMap<Long, User> getBorrowers() {
+	public TreeMap<Long, Client> getBorrowers() {
 		return borrowers;
 	}
 
@@ -197,7 +197,7 @@ public class Element {
 										.append("\n");
 		if (this.borrowers.size() > 0) {
 			sb.append("Borrowers : ");
-			for (User user : this.borrowers.values()) {
+			for (Client user : this.borrowers.values()) {
 				try {
 					sb.append(user.getName()).append(", ");
 				} catch (RemoteException e) {
@@ -219,7 +219,7 @@ public class Element {
 										.append("\n");
 		if (this.borrowers.size() > 0) {
 			sb.append("Borrowers : ");
-			for (User user : this.borrowers.values()) {
+			for (Client user : this.borrowers.values()) {
 				sb.append(user.getName()).append(", ");
 			}
 			int size = sb.length();

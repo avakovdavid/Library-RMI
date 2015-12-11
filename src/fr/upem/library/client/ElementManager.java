@@ -13,7 +13,7 @@ public interface ElementManager extends Remote {
 	/**
 	 * @return a queue of all users waiting
 	 */
-	Queue<User> getWaitingList() throws RemoteException;
+	Queue<Client> getWaitingList() throws RemoteException;
 	
 	/**
 	 * @return all elements
@@ -30,13 +30,13 @@ public interface ElementManager extends Remote {
 	 * @param user the user to add
 	 * @return true if the user as been had, false otherwise
 	 */
-	boolean addUser(User user) throws RemoteException;
+	boolean addUser(Client user) throws RemoteException;
 	
 	/**
 	 * Removes a user from the list of waiting
 	 * @param user the user to remove
 	 */
-	void removeUser(User user) throws RemoteException;
+	void removeUser(Client user) throws RemoteException;
 	
 	/**
 	 * Adds an element in the library at the specified date
@@ -69,7 +69,7 @@ public interface ElementManager extends Remote {
 	 * @param user the user borrowing the element
 	 * @return an <b>Optional</b> containing the element
 	 */
-	Optional<Element> borrowByUser(User person) throws RemoteException;
+	Optional<Element> borrowByUser(Client person) throws RemoteException;
 
 	/**
 	 * Returns the element borrowed by the specified user at the specified date
@@ -77,7 +77,7 @@ public interface ElementManager extends Remote {
 	 * @param user the user borrowing the element
 	 * @return an <b>Optional</b> containing the element
 	 */
-	Optional<Element> borrowByUser(long date, User user) throws RemoteException;
+	Optional<Element> borrowByUser(long date, Client user) throws RemoteException;
 	
 	/**
 	 * Post a comment 

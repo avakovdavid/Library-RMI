@@ -25,7 +25,6 @@ public class LibraryServer {
 			Naming.rebind(user2Url, davakov);
 			Naming.rebind(user3Url, mlabardy);
 			
-			System.out.println("server starting ...");
 		} catch (RemoteException e) {
 			System.err.println("Trouble : " + e);
 		} catch (MalformedURLException e) {		

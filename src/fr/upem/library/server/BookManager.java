@@ -13,7 +13,7 @@ import java.util.concurrent.ArrayBlockingQueue;
 public class BookManager extends UnicastRemoteObject implements ElementManager {
 	
 	private ArrayList<Element> elements = new ArrayList<>();
-	private ArrayBlockingQueue<User> users = new ArrayBlockingQueue<>(10); // limited to 10 users
+	private ArrayBlockingQueue<Client> users = new ArrayBlockingQueue<>(10); // limited to 10 users
 	private final ArrayBlockingQueue<Comment> comments = new ArrayBlockingQueue<>(100); // limited to 100 comments
 	
 	
@@ -27,7 +27,7 @@ public class BookManager extends UnicastRemoteObject implements ElementManager {
 	}
 	
 	@Override
-	public Queue<User> getWaitingList() throws RemoteException {
+	public Queue<Client> getWaitingList() throws RemoteException {
 		return this.users;
 	}
 	
@@ -37,13 +37,13 @@ public class BookManager extends UnicastRemoteObject implements ElementManager {
 	}
 
 	@Override
-	public boolean addUser(User user) throws RemoteException {
+	public boolean addUser(Client user) throws RemoteException {
 		Objects.requireNonNull(user);
 		return this.users.offer(user);
 	}
 	
 	@Override
-	public void removeUser(User user) throws RemoteException {
+	public void removeUser(Client user) throws RemoteException {
 		Objects.requireNonNull(user);
 		this.users.remove(user);
 	}
@@ -71,7 +71,7 @@ public class BookManager extends UnicastRemoteObject implements ElementManager {
 	}
 	
 	@Override
-	public Optional<Element> borrowByUser(User user) throws RemoteException {
+	public Optional<Element> borrowByUser(Client user) throws RemoteException {
 		Objects.requireNonNull(user);
 		for (Element element : this.elements) {
 			if (element.isAvailable()) {
@@ -86,7 +86,7 @@ public class BookManager extends UnicastRemoteObject implements ElementManager {
 	}
 	
 	@Override
-	public Optional<Element> borrowByUser(long date, User user) throws RemoteException {
+	public Optional<Element> borrowByUser(long date, Client user) throws RemoteException {
 		Objects.requireNonNull(user);
 		for (Element element : this.elements) {
 			if (element.isAvailable()) {
@@ -106,7 +106,7 @@ public class BookManager extends UnicastRemoteObject implements ElementManager {
 		if (this.elements.contains(element)) {
 			Element myElement = this.elements.get(this.elements.indexOf(element));
 			ElementReference reference = myElement.getReference();
-			User user = this.users.poll();
+			Client user = this.users.poll();
 			if (user != null) {
 				user.addNotification("Book (" + myElement.getReference().getTitle() + ')');
 				myElement.releaseByUser();
@@ -178,7 +178,7 @@ public class BookManager extends UnicastRemoteObject implements ElementManager {
 		}
 		if (this.users.size() > 0) {
 			sb.append("\nPeople waiting : ");
-			for (User user : this.users) {
+			for (Client user : this.users) {
 				try {
 					sb.append(user.getName()).append(", ");
 				} catch (RemoteException e) {

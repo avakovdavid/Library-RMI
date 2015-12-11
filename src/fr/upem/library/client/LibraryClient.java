@@ -10,7 +10,7 @@ public class LibraryClient {
 
 	public static void main(String[] args) {
 		
-		String codebase = "file:///home/2inl2/mlabardy/workspace-full/MLVSchoolLibrary/src/fr/upem/library/server/";
+		String codebase = "file:///Users/martine/Library-RMI/src/fr/upem/library/server/";
 		System.setProperty("java.rmi.server.codebase", codebase);
 		System.setProperty("java.security.policy", codebase + "securityPolicy.policy");
 		
@@ -18,7 +18,6 @@ public class LibraryClient {
 			System.setSecurityManager(new RMISecurityManager());
 		}
 		try {
-			System.out.println("Client execution ... ");
 			LibraryManagerInterface library = (LibraryManagerInterface)Naming.lookup("rmi://localhost/LibraryService");
 		
 			Client yfeugueur = (Client)Naming.lookup("rmi://localhost/User1Service");
@@ -29,8 +28,8 @@ public class LibraryClient {
 			davakov.borrowElement(2535);
 			mlabardy.borrowElement(2535);
 			
+			System.out.println(library.getNotifications(yfeugueur));
 			
-			System.out.println(library);
 		} catch (MalformedURLException | RemoteException | NotBoundException e) {
 			System.err.println("Trouble " + e);
 		}

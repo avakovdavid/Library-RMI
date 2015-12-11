@@ -68,14 +68,14 @@ public interface LibraryManagerInterface extends Remote {
 	 * Removes all the notifications of the specified user
 	 * @param user the owner of the notifications
 	 */
-	public void removeNotifications(User user) throws RemoteException;
+	public void removeNotifications(Client user) throws RemoteException;
 	
 	/**
 	 * Get all notifications associated to the specified user
 	 * @param user the owner of the notifications
 	 * @return a map of all notification whose keys are the date 
 	 */
-	public HashMap<Long, String> getNotifications(User user) throws RemoteException;
+	public HashMap<Long, String> getNotifications(Client user) throws RemoteException;
 	
 	/**
 	 * Indicates if at less one element remains available
