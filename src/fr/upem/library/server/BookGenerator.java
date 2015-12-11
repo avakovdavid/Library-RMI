@@ -60,7 +60,7 @@ public final class BookGenerator {
 		libraryManager.addElement(Book.create(programmationDApplicationsInternetAvecJava()));
 	}
 
-	public static ElementReference autantEnEmporteLeVent() throws ParseException {
+	public static ElementReference autantEnEmporteLeVent() throws ParseException, RemoteException {
 		String title = "Autant en emporte le vent";
 		String editor = "Macmillan Publishers";
 		String authors = "Margaret Mitchell";
@@ -76,7 +76,7 @@ public final class BookGenerator {
 		return BookReference.create(price, ISBN, title, editor, resume, publicationDate, authors);
 	}
 
-	public static ElementReference madameBovary() throws ParseException {
+	public static ElementReference madameBovary() throws ParseException, RemoteException {
 		String title = "Madame Bovary";
 		String editor = "Michel Lévy frères";
 		String authors = "Gustave Flaubert";
@@ -98,7 +98,7 @@ public final class BookGenerator {
 		return BookReference.create(price, ISBN, title, editor, resume, publicationDate, authors);
 	}
 
-	public static ElementReference windows10pourLesNuls() throws ParseException {
+	public static ElementReference windows10pourLesNuls() throws ParseException, RemoteException {
 		String title = "Windows 10 Tout-en-un pour les Nuls";
 		String editor = "First Interactive";
 		String authors = "Woody LEONHARD";
@@ -113,7 +113,7 @@ public final class BookGenerator {
 		return BookReference.create(price, ISBN, title, editor, resume, publicationDate, authors);
 	}
 	
-	public static ElementReference auCoeurDeCorba() throws ParseException {
+	public static ElementReference auCoeurDeCorba() throws ParseException, RemoteException {
 		String title = "Au coeur de corba avec Java";
 		String editor = "Vuibert";
 		String authors = "Jérôme Daniel";
@@ -134,7 +134,7 @@ public final class BookGenerator {
 		return BookReference.create(price, ISBN, title, editor, resume, publicationDate, authors);
 	}
 	
-	public static ElementReference laGuerreEtLaPaix() throws ParseException {
+	public static ElementReference laGuerreEtLaPaix() throws ParseException, RemoteException {
 		String title = "La Guerre et la Paix";
 		String editor = "Gallimard";
 		String authors = "Léon Tolstoï";
@@ -151,7 +151,7 @@ public final class BookGenerator {
 		return BookReference.create(price, ISBN, title, editor, resume, publicationDate, authors);
 	}
 	
-	public static ElementReference pokemonLEncyclo() throws ParseException {
+	public static ElementReference pokemonLEncyclo() throws ParseException, RemoteException {
 		String title = "Pokémon / L'Encyclo";
 		String editor = "Gallimard";
 		String authors = "Collectif";
@@ -163,7 +163,7 @@ public final class BookGenerator {
 		return BookReference.create(price, ISBN, title, editor, resume, publicationDate, authors);
 	}
 	
-	public static ElementReference histoireDeLaRussieEtDeSonEmpire() throws ParseException {
+	public static ElementReference histoireDeLaRussieEtDeSonEmpire() throws ParseException, RemoteException {
 		String title = "Histoire de la Russie et de son Empire";
 		String editor = "Plon";
 		String authors = "Michel HELLER";
@@ -177,7 +177,7 @@ public final class BookGenerator {
 		return BookReference.create(price, ISBN, title, editor, resume, publicationDate, authors);
 	}
 	
-	public static ElementReference poutine() throws ParseException {
+	public static ElementReference poutine() throws ParseException, RemoteException {
 		String title = "Poutine";
 		String editor = "Calmann-Lévy";
 		String authors = "Frédéric Pons";
@@ -196,7 +196,7 @@ public final class BookGenerator {
 		return BookReference.create(price, ISBN, title, editor, resume, publicationDate, authors);
 	}
 	
-	public static ElementReference programmationDApplicationsInternetAvecJava() throws ParseException {
+	public static ElementReference programmationDApplicationsInternetAvecJava() throws ParseException, RemoteException {
 		String title = "Programmation d'applications internet avec java";
 		String editor = "Vuibert";
 		String author1 = "Gaby Roussel";
@@ -209,7 +209,7 @@ public final class BookGenerator {
 		return BookReference.create(price, ISBN, title, editor, resume, publicationDate, author1, author2);
 	}
 	
-	public static ElementReference uneAutreIdéeDuBonheur() throws ParseException {
+	public static ElementReference uneAutreIdéeDuBonheur() throws ParseException, RemoteException {
 		String title = "Une autre idée du bonheur";
 		String editor = "Pocket";
 		String authors = "Marc LEVY";

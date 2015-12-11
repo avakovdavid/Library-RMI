@@ -1,5 +1,6 @@
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -40,8 +41,11 @@ public class LibraryManager extends UnicastRemoteObject implements LibraryObserv
 	public static LibraryManager getInstance() throws RemoteException {
 		if (libraryManager == null) {
 			libraryManager = new LibraryManager();
+			try {
 			BookGenerator.init(libraryManager);
-			
+			} catch (ParseException e) {
+				System.err.println("Trouble " + e);
+			}
 		}
 		return libraryManager;
 	}
