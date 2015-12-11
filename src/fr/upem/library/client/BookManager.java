@@ -108,7 +108,7 @@ public class BookManager extends UnicastRemoteObject implements ElementManager {
 			ElementReference reference = myElement.getReference();
 			User user = this.users.poll();
 			if (user != null) {
-				user.addNotification("Book (" + myElement.getReference().getTitle() + ')');
+				user.addNotification(myElement.getReference().getTitle() + " est disponible, il est ajouté dans votre compte");
 				myElement.releaseByUser();
 				user.borrowElement(reference);
 			} else {

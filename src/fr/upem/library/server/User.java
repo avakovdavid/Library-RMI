@@ -134,7 +134,12 @@ public class User extends UnicastRemoteObject implements Client {
 	 * Updates the status of the books currently borrowed 
 	 */
 	public void updateBooksStatus() throws RemoteException {
-		this.elements.stream().filter(element -> element.isReleasedDateExpire()).forEach(element -> element.setToLate());
+		for (Element element : this.elements) {
+			if (element.isReleasedDateExpire()) {
+				element.setToLate();
+				addNotification(element.getReference().getTitle() + " doit être rendu dans les plus brefs délais");
+			}
+		}
 	}
 	
 	/**
