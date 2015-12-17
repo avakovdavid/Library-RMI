@@ -1,10 +1,14 @@
+package fr.upem.library.client;
+
 
 import java.rmi.Remote;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Objects;
 import java.util.Optional;
+
+import fr.upem.library.element.Book;
+import fr.upem.library.reference.ElementReference;
 
 
 public interface Client extends Remote {
@@ -17,7 +21,7 @@ public interface Client extends Remote {
 	/**
 	 * @return the borrowing books 
 	 */
-	public ArrayList<Element> getBooks() throws RemoteException;
+	public ArrayList<Book> getBooks() throws RemoteException;
 	
 	/**
 	 * @return the id
@@ -101,7 +105,7 @@ public interface Client extends Remote {
 	 * @param element the element to release
 	 * @return true if the element is released, false otherwise
 	 */
-	public boolean releaseElement(Element element) throws RemoteException;
+	public boolean releaseElement(Book element) throws RemoteException;
 
 	/**
 	 * Comments an element according it reference

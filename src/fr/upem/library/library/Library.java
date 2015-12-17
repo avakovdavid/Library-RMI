@@ -1,24 +1,26 @@
+package fr.upem.library.library;
+
 import java.rmi.RemoteException;
-import java.rmi.server.UnicastRemoteObject;
-import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
+import java.util.Queue;
+
+import fr.upem.library.client.Client;
+import fr.upem.library.element.Comment;
+import fr.upem.library.element.Book;
+import fr.upem.library.reference.ElementReference;
 
 
 
-public class LibraryManager extends UnicastRemoteObject implements LibraryObserver, LibraryManagerInterface {
 
-	/**
-	 * Remote warning value
-	 */
-	private static final long serialVersionUID = 5600157775059918047L;
+public class Library implements LibraryObserver, LibraryManager {
 
 	/**
 	 * The library that contains books
 	 */
-	private final Library library;
+	private final BookCase library;
 
 	/**
 	 * The list containing all subscribers
@@ -26,11 +28,11 @@ public class LibraryManager extends UnicastRemoteObject implements LibraryObserv
 	private final List<Client> users = new ArrayList<Client>();
 
 	// singleton
-	private static LibraryManager libraryManager;
+	private static Library libraryManager;
 
-	private LibraryManager() throws RemoteException {
+	private Library() throws RemoteException {
 		super();
-		this.library = new Library();
+		this.library = new BookCase();
 	}
 
 	/**
@@ -38,18 +40,23 @@ public class LibraryManager extends UnicastRemoteObject implements LibraryObserv
 	 * @return a new LibraryManager object
 	 * @throws RemoteException 
 	 */
-	public static LibraryManager getInstance() throws RemoteException {
+	public static Library getInstance() throws RemoteException {
 		if (libraryManager == null) {
-			libraryManager = new LibraryManager();
-			try {
+			libraryManager = new Library();
+			/*try {
 			BookGenerator.init(libraryManager);
 			} catch (ParseException e) {
 				System.err.println("Trouble " + e);
-			}
+			}*/
 		}
 		return libraryManager;
 	}
 
+	@Override
+	public LibraryManager get() throws RemoteException {
+		return this;
+	}
+	
 	@Override
 	public void subscribe(Client user) {
 		this.users.add(user);
@@ -68,23 +75,28 @@ public class LibraryManager extends UnicastRemoteObject implements LibraryObserv
 	}
 
 	@Override
-	public void addElement(Element element) throws RemoteException {
+	public void addElement(Book element) throws RemoteException {
 		this.library.addElement(element);
 	}
 
 	@Override
-	public void addElement(long date, Element element) throws RemoteException {
+	public void addElement(long date, Book element) throws RemoteException {
 		this.library.addElement(date, element);
 	}
 
 	@Override
-	public void removeElement(Element element) throws RemoteException {
+	public void removeElement(Book element) throws RemoteException {
 		this.library.removeElement(element);
 	}
 
 	@Override
 	public long getBankAccountId() throws RemoteException {
 		return this.library.getBankAccountId();
+	}
+	
+	@Override
+	public Queue<Comment> getComments(ElementReference reference) throws RemoteException {
+		return this.library.getComments(reference);
 	}
 
 	@Override
@@ -93,7 +105,7 @@ public class LibraryManager extends UnicastRemoteObject implements LibraryObserv
 	}
 
 	@Override
-	public List<Element> buyableElements() throws RemoteException {
+	public List<Book> buyableElements() throws RemoteException {
 		return this.library.buyableElements();
 	}
 
@@ -103,7 +115,7 @@ public class LibraryManager extends UnicastRemoteObject implements LibraryObserv
 	}
 	
 	@Override
-	public List<Element> availableElements() throws RemoteException {
+	public List<Book> availableElements() throws RemoteException {
 		return this.library.availableElements();
 	}
 
@@ -148,7 +160,7 @@ public class LibraryManager extends UnicastRemoteObject implements LibraryObserv
 	 * @throws RemoteException 
 	 * @throws IllegalArgumentException 
 	 */
-	Optional<Element> borrowElement(ElementReference elementReference, Client user) throws IllegalArgumentException, RemoteException {
+	Optional<Book> borrowElement(ElementReference elementReference, Client user) throws IllegalArgumentException, RemoteException {
 		return this.library.borrowElement(elementReference, user);
 	}
 
@@ -160,7 +172,7 @@ public class LibraryManager extends UnicastRemoteObject implements LibraryObserv
 	 * @return the element borrowed
 	 * @throws RemoteException 
 	 */
-	Optional<Element> borrowElement(long date, ElementReference elementReference, Client user) throws RemoteException {
+	public Optional<Book> borrowElement(long date, ElementReference elementReference, Client user) throws RemoteException {
 		return this.library.borrowElement(date, elementReference,  user);
 	}
 
@@ -169,7 +181,7 @@ public class LibraryManager extends UnicastRemoteObject implements LibraryObserv
 	 * @param element the element to release
 	 * @throws RemoteException 
 	 */
-	void releaseElement(Element element) throws RemoteException {
+	public void releaseElement(Book element) throws RemoteException {
 		this.library.releaseElement(element);
 	}
 	
@@ -189,7 +201,7 @@ public class LibraryManager extends UnicastRemoteObject implements LibraryObserv
 	 * @param comment the comment to add to the element
 	 * @throws RemoteException 
 	 */
-	void commentElement(ElementReference elementReference, Comment comment) throws RemoteException {
+	public void commentElement(ElementReference elementReference, Comment comment) throws RemoteException {
 		this.library.commentElement(elementReference, comment);
 	}
 	
@@ -203,6 +215,10 @@ public class LibraryManager extends UnicastRemoteObject implements LibraryObserv
 		return this.library.toString();
 	}
 
+	@Override
+	public String display() throws RemoteException {
+		return this.library.toString();
+	}
 
 
 }

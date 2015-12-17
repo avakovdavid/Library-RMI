@@ -1,12 +1,18 @@
+package fr.upem.library.element;
 
+
+import java.io.Serializable;
 import java.rmi.RemoteException;
 import java.util.Date;
 import java.util.Objects;
 import java.util.TreeMap;
 import java.util.concurrent.atomic.AtomicBoolean;
 
+import fr.upem.library.client.Client;
+import fr.upem.library.reference.ElementReference;
 
-public class Element {
+
+public class Book implements Serializable {
 	
 	private static final double VALUE = 5.0;
 	private static final double PERCENT = 0.2;
@@ -17,20 +23,39 @@ public class Element {
 	private static final long YEAR = 31556926000L;
 	
 	private final ElementReference reference;
-	private final TreeMap<Long, Client> borrowers; // date d'emprunt
+	private final TreeMap<Long, Client> borrowers;
 	private final long purchaseDate; // date d'achat
 	private AtomicBoolean available = new AtomicBoolean(true);
 	private AtomicBoolean late = new AtomicBoolean(false);
 	
-	Element(ElementReference reference) {
+	private Book(ElementReference reference) {
 		this(System.currentTimeMillis(), reference);
 	}
 	
-	Element(long purchaseDate, ElementReference reference) {
+	private Book(long purchaseDate, ElementReference reference) {
 		this.reference = Objects.requireNonNull(reference);
 		this.purchaseDate = purchaseDate;
 		this.borrowers = new TreeMap<Long, Client>();
 		this.id = ID++;
+	}
+	
+	/**
+	 * 
+	 * @param purchaseDate
+	 * @param reference
+	 * @return
+	 */
+	public static Book create(long purchaseDate, ElementReference reference) {
+		return new Book(purchaseDate, reference);
+	}
+	
+	/**
+	 * 
+	 * @param reference
+	 * @return
+	 */
+	public static Book create(ElementReference reference) {
+		return new Book(reference);
 	}
 	
 	/**
@@ -92,7 +117,6 @@ public class Element {
 			return true;
 		}
 		return false;
-		//return (System.currentTimeMillis() - this.borrowers.lastKey() > BORROW_PERIOD) ? this.borrowers.get(this.borrowers.lastKey()) : null;
 	}
 	
 	/**
@@ -178,10 +202,10 @@ public class Element {
 
 	@Override
 	public boolean equals(Object obj) {
-		if (!(obj instanceof Element)) {
+		if (!(obj instanceof Book)) {
 			return false;
 		}
-		Element bookIndex = (Element)obj;
+		Book bookIndex = (Book)obj;
 		return /*bookIndex.borrowers.equals(this.borrowers) &&
 				bookIndex.purchaseDate == this.purchaseDate &&
 				bookIndex.available.equals(this.available) &&*/

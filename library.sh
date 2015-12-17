@@ -2,51 +2,39 @@
 
 if [ -z $1 ]
 then 
-	echo "./library.sh start\n./library.sh stop"
+	echo "./library.sh 	start"
+	echo "stop"
 
 elif [ $1 = "start" ]
 then
-	echo "compiles server sources"
-	javac src/fr/upem/library/server/*.java
+	echo "compiles server sources ..."
+	javac -d ./bin/ -cp /Users/martine/Library-RMI/bin/ src/fr/upem/library/reference/*.java src/fr/upem/library/element/*.java src/fr/upem/library/client/*.java src/fr/upem/library/library/*.java src/fr/upem/library/main/*.java
 
-	echo "compiles client sources"
-	{
-		javac src/fr/upem/library/client/*.java
-	}&>/dev/null
+#/Users/martine/Library-RMI/src/fr/upem/library/main/ 
 
-	cd src/fr/upem/library/server/ 
-
-	echo "rmic ..."
-	{
-	    rmic BookManager
-		rmic BookReference
-	    rmic User
-		rmic LibraryManager
-	}&>/dev/null
-
+	cd bin
 	echo "rmiregistry ..."
 	rmiregistry&
 
     sleep 3
-	cd ../server/
+	cd ../src/
 
 
 	echo "executes the library server ..."
-	java -Djava.security.policy=securityPolicy.policy LibraryServer&
+	java -cp ./bin/:/Users/martine/Library-RMI/bin/ -Djava.rmi.server.codebase=file:///Users/martine/Library-RMI/bin/ -Djava.security.policy=/Users/martine/Library-RMI/securityPolicy.policy fr.upem.library.main.LibraryServer&
 
-    sleep 5
-	cd ../client/
+	echo "server ready ..."
+    #sleep 4
+	#cd ../client/
 
-	echo "executes the library client ..."
-	java LibraryClient
+	#echo "executes the library client ..."
+	#java LibraryClient
 
-	cd ../
-    rm */*.class
+	#cd ../
+    #rm */*.class
 
 elif [ $1 = "stop" ]
-
 then
 	pkill rmiregistry
-
 
 fi

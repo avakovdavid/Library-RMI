@@ -1,14 +1,16 @@
+package fr.upem.library.reference;
 
 
+
+import java.io.Serializable;
 import java.rmi.RemoteException;
-import java.rmi.server.UnicastRemoteObject;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Objects;
 
 
 
-public class BookReference extends UnicastRemoteObject implements ElementReference {
+public class BookReference implements ElementReference, Serializable {
 	
 	private final String title;
 	private final HashSet<String> authors = new HashSet<String>();

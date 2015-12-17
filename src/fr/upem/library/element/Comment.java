@@ -1,8 +1,12 @@
+package fr.upem.library.element;
+
 
 import java.rmi.RemoteException;
 import java.util.Date;
 import java.util.Objects;
 import java.util.Optional;
+
+import fr.upem.library.client.Client;
 
 
 public class Comment {

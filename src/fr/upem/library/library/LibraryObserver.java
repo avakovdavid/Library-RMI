@@ -1,3 +1,10 @@
+package fr.upem.library.library;
+
+
+import java.rmi.RemoteException;
+
+import fr.upem.library.client.Client;
+
 
 
 
@@ -14,5 +21,11 @@ public interface LibraryObserver {
 	 * @param user that stop subscribing
 	 */
 	public void unsubscribe(Client user);
+	
+	/**
+	 * Notifies all subscribing users of the state of their books 
+	 * @throws RemoteException 
+	 */
+	public void notifyUsers() throws RemoteException;
 
 }

@@ -1,7 +1,8 @@
+package fr.upem.library.element;
+
 
 
 import java.rmi.RemoteException;
-import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -9,10 +10,13 @@ import java.util.Optional;
 import java.util.Queue;
 import java.util.concurrent.ArrayBlockingQueue;
 
+import fr.upem.library.client.Client;
+import fr.upem.library.reference.ElementReference;
 
-public class BookManager extends UnicastRemoteObject implements ElementManager {
+
+public class BookManager implements ElementManager {
 	
-	private ArrayList<Element> elements = new ArrayList<>();
+	private ArrayList<Book> elements = new ArrayList<>();
 	private ArrayBlockingQueue<Client> users = new ArrayBlockingQueue<>(10); // limited to 10 users
 	private final ArrayBlockingQueue<Comment> comments = new ArrayBlockingQueue<>(100); // limited to 100 comments
 	
@@ -22,7 +26,7 @@ public class BookManager extends UnicastRemoteObject implements ElementManager {
 	}
 	
 	@Override
-	public List<Element> getElements() throws RemoteException {
+	public List<Book> getElements() throws RemoteException {
 		return this.elements;
 	}
 	
@@ -49,13 +53,13 @@ public class BookManager extends UnicastRemoteObject implements ElementManager {
 	}
 	
 	@Override
-	public boolean addElement(long date, Element element) throws RemoteException {
+	public boolean addElement(long date, Book element) throws RemoteException {
 		Objects.requireNonNull(element);
 		return this.elements.add(element);
 	}
 	
 	@Override
-	public void removeElement(Element book) throws RemoteException {
+	public void removeElement(Book book) throws RemoteException {
 		Objects.requireNonNull(book);
 		this.elements.remove(book);
 	}
@@ -71,9 +75,9 @@ public class BookManager extends UnicastRemoteObject implements ElementManager {
 	}
 	
 	@Override
-	public Optional<Element> borrowByUser(Client user) throws RemoteException {
+	public Optional<Book> borrowByUser(Client user) throws RemoteException {
 		Objects.requireNonNull(user);
-		for (Element element : this.elements) {
+		for (Book element : this.elements) {
 			if (element.isAvailable()) {
 				element.borrowByUser(user);
 				return Optional.of(element);
@@ -86,9 +90,9 @@ public class BookManager extends UnicastRemoteObject implements ElementManager {
 	}
 	
 	@Override
-	public Optional<Element> borrowByUser(long date, Client user) throws RemoteException {
+	public Optional<Book> borrowByUser(long date, Client user) throws RemoteException {
 		Objects.requireNonNull(user);
-		for (Element element : this.elements) {
+		for (Book element : this.elements) {
 			if (element.isAvailable()) {
 				element.borrowByUser(date, user);
 				return Optional.of(element);
@@ -101,14 +105,14 @@ public class BookManager extends UnicastRemoteObject implements ElementManager {
 	}
 	
 	@Override
-	public void release(Element element) throws RemoteException {
+	public void release(Book element) throws RemoteException {
 		Objects.requireNonNull(element);
 		if (this.elements.contains(element)) {
-			Element myElement = this.elements.get(this.elements.indexOf(element));
+			Book myElement = this.elements.get(this.elements.indexOf(element));
 			ElementReference reference = myElement.getReference();
 			Client user = this.users.poll();
 			if (user != null) {
-				user.addNotification(myElement.getReference().getTitle() + " est disponible, il est ajouté dans votre compte");
+				user.addNotification("Book (" + myElement.getReference().getTitle() + ')');
 				myElement.releaseByUser();
 				user.borrowElement(reference);
 			} else {
@@ -124,9 +128,9 @@ public class BookManager extends UnicastRemoteObject implements ElementManager {
 	}
 	
 	@Override
-	public List<Element> getListOfBuyableElements() throws RemoteException {
-		List<Element> buyableBooks = new ArrayList<Element>();
-		for (Element element : this.elements) {
+	public List<Book> getListOfBuyableElements() throws RemoteException {
+		List<Book> buyableBooks = new ArrayList<Book>();
+		for (Book element : this.elements) {
 			boolean buyable = element.hasBeenBorrowed();
 			boolean available = element.isAvailable();
 			boolean old = element.age() >= 2;
@@ -138,9 +142,9 @@ public class BookManager extends UnicastRemoteObject implements ElementManager {
 	}
 	
 	@Override
-	public List<Element> getListOfAvailableElements() throws RemoteException {
-		List<Element> borrowableBooks = new ArrayList<Element>();
-		for (Element element : this.elements) {
+	public List<Book> getListOfAvailableElements() throws RemoteException {
+		List<Book> borrowableBooks = new ArrayList<Book>();
+		for (Book element : this.elements) {
 			if (element.isAvailable()) {
 				borrowableBooks.add(element);
 			}
@@ -149,9 +153,9 @@ public class BookManager extends UnicastRemoteObject implements ElementManager {
 	}
 	
 	@Override
-	public List<Element> getListOfBorrowableElements() throws RemoteException {
-		List<Element> borrowableBooks = new ArrayList<Element>();
-		for (Element element : this.elements) {
+	public List<Book> getListOfBorrowableElements() throws RemoteException {
+		List<Book> borrowableBooks = new ArrayList<Book>();
+		for (Book element : this.elements) {
 			borrowableBooks.add(element);
 		}
 		return borrowableBooks;
@@ -159,7 +163,7 @@ public class BookManager extends UnicastRemoteObject implements ElementManager {
 	
 	@Override
 	public boolean isAvailable() throws RemoteException {
-		for (Element element : this.elements) {
+		for (Book element : this.elements) {
 			if (!element.isAvailable()) {
 				return false;
 			}
@@ -189,7 +193,7 @@ public class BookManager extends UnicastRemoteObject implements ElementManager {
 			sb.delete(size - 2, size);
 		}
 		sb.append('\n');
-		for (Element book : elements) {
+		for (Book book : elements) {
 			sb.append(book).append('\n');
 		}
 		return sb.toString();

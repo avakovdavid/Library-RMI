@@ -1,11 +1,19 @@
+package fr.upem.library.main;
+
+
 import java.rmi.RemoteException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import fr.upem.library.element.Book;
+import fr.upem.library.library.Library;
+import fr.upem.library.reference.BookReference;
+import fr.upem.library.reference.ElementReference;
+
 public final class BookGenerator {
 
-	public static void init(LibraryManager libraryManager) throws RemoteException, ParseException {
+	public static void init(Library libraryManager) throws RemoteException, ParseException {
 
 		//Autant en emporte le vent
 		libraryManager.addElement(new SimpleDateFormat("dd/MM/yyyy").parse("17/04/2013").getTime(), Book.create(autantEnEmporteLeVent()));

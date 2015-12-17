@@ -1,3 +1,5 @@
+package fr.upem.library.element;
+
 
 
 import java.rmi.Remote;
@@ -6,6 +8,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Queue;
 
+import fr.upem.library.client.Client;
+
 
 
 public interface ElementManager extends Remote {
@@ -13,17 +17,17 @@ public interface ElementManager extends Remote {
 	/**
 	 * @return a queue of all users waiting
 	 */
-	Queue<Client> getWaitingList() throws RemoteException;
+	public Queue<Client> getWaitingList() throws RemoteException;
 	
 	/**
 	 * @return all elements
 	 */
-	List<Element> getElements() throws RemoteException;
+	public List<Book> getElements() throws RemoteException;
 	
 	/**
 	 * @return all comments
 	 */
-	Queue<Comment> getComments() throws RemoteException;
+	public Queue<Comment> getComments() throws RemoteException;
 	
 	/**
 	 * Adds a user in the list of waiting
@@ -44,13 +48,13 @@ public interface ElementManager extends Remote {
 	 * @param element the element to add
 	 * @return true if the element has been added, false otherwise
 	 */
-	boolean addElement(long date, Element element) throws RemoteException;
+	boolean addElement(long date, Book element) throws RemoteException;
 	
 	/**
 	 * Removes an element from the library
 	 * @param element the element to remove
 	 */
-	void removeElement(Element element) throws RemoteException;
+	void removeElement(Book element) throws RemoteException;
 	
 	/**
 	 * Indicates if the list of elements is empty
@@ -69,7 +73,7 @@ public interface ElementManager extends Remote {
 	 * @param user the user borrowing the element
 	 * @return an <b>Optional</b> containing the element
 	 */
-	Optional<Element> borrowByUser(Client person) throws RemoteException;
+	Optional<Book> borrowByUser(Client person) throws RemoteException;
 
 	/**
 	 * Returns the element borrowed by the specified user at the specified date
@@ -77,7 +81,7 @@ public interface ElementManager extends Remote {
 	 * @param user the user borrowing the element
 	 * @return an <b>Optional</b> containing the element
 	 */
-	Optional<Element> borrowByUser(long date, Client user) throws RemoteException;
+	Optional<Book> borrowByUser(long date, Client user) throws RemoteException;
 	
 	/**
 	 * Post a comment 
@@ -89,25 +93,25 @@ public interface ElementManager extends Remote {
 	 * Releases an element 
 	 * @param element the element to release
 	 */
-	void release(Element element) throws RemoteException;
+	void release(Book element) throws RemoteException;
 	
 	/**
 	 * Returns the list of all buyable elements
 	 * @return a list of buyable elements
 	 */
-	List<Element> getListOfBuyableElements() throws RemoteException;
+	List<Book> getListOfBuyableElements() throws RemoteException;
 	
 	/**
 	 * Returns the list of all borrowable elements
 	 * @return a list of borrowable elements
 	 */
-	List<Element> getListOfBorrowableElements() throws RemoteException;
+	List<Book> getListOfBorrowableElements() throws RemoteException;
 	
 	/**
 	 * Returns the list of all available elements
 	 * @return a list of available elements
 	 */
-	List<Element> getListOfAvailableElements() throws RemoteException;
+	List<Book> getListOfAvailableElements() throws RemoteException;
 	
 	/**
 	 * Indicates if there at less one element available

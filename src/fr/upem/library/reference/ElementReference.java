@@ -1,3 +1,5 @@
+package fr.upem.library.reference;
+
 import java.rmi.Remote;
 import java.rmi.RemoteException;
 import java.util.Date;
@@ -11,7 +13,7 @@ public interface ElementReference extends Remote {
 	 * Set the resume
 	 * @param resume
 	 */
-	void setResume(String resume) throws RemoteException;
+	public void setResume(String resume) throws RemoteException;
 	
 	/**
 	 * @return the title

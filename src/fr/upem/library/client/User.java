@@ -1,14 +1,21 @@
+package fr.upem.library.client;
 
+
+import java.io.Serializable;
 import java.rmi.RemoteException;
-import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Objects;
 import java.util.Optional;
 
+import fr.upem.library.element.Comment;
+import fr.upem.library.element.Book;
+import fr.upem.library.library.Library;
+import fr.upem.library.reference.ElementReference;
 
 
-public class User extends UnicastRemoteObject implements Client {
+
+public class User implements Client, Serializable {
 	
 	private static long CURRENT_ID = 0;
 	private final long id = CURRENT_ID++;
@@ -22,11 +29,11 @@ public class User extends UnicastRemoteObject implements Client {
 	private final long bankAccountId;
 	private String currency;
 	
-	private final ArrayList<Element> elements = new ArrayList<>();
-	private final LibraryManager observer;
+	private final ArrayList<Book> elements = new ArrayList<>();
+	private final Library observer;
 	
 	
-	private User(long bankAccountId, String currency, String surname, String firstname, String email, String password, LibraryManager observer) throws RemoteException {
+	private User(long bankAccountId, String currency, String surname, String firstname, String email, String password, Library observer) throws RemoteException {
 		super();
 		this.bankAccountId = bankAccountId;
 		this.surname = Objects.requireNonNull(surname);
@@ -48,7 +55,7 @@ public class User extends UnicastRemoteObject implements Client {
 	 * @param observer the service to subscribe to
 	 * @return a new user
 	 */
-	public static User create(long bankAccountId, String currency, String surname, String firstname, String email, String password, LibraryManager observer) throws RemoteException {
+	public static User create(long bankAccountId, String currency, String surname, String firstname, String email, String password, Library observer) throws RemoteException {
 		if (bankAccountId <= 0) {
 			throw new IllegalArgumentException("The account number is negative");
 		}
@@ -68,7 +75,7 @@ public class User extends UnicastRemoteObject implements Client {
 	/**
 	 * @return the borrowing books 
 	 */
-	public ArrayList<Element> getBooks() throws RemoteException {
+	public ArrayList<Book> getBooks() throws RemoteException {
 		return this.elements;
 	}
 	
@@ -134,7 +141,7 @@ public class User extends UnicastRemoteObject implements Client {
 	 * Updates the status of the books currently borrowed 
 	 */
 	public void updateBooksStatus() throws RemoteException {
-		for (Element element : this.elements) {
+		for (Book element : this.elements) {
 			if (element.isReleasedDateExpire()) {
 				element.setToLate();
 				addNotification(element.getReference().getTitle() + " doit être rendu dans les plus brefs délais");
@@ -159,7 +166,7 @@ public class User extends UnicastRemoteObject implements Client {
 	 */
 	public boolean borrowElement(long date, ElementReference elementReference) throws RemoteException {
 		Objects.requireNonNull(elementReference);
-		Optional<Element> element = this.observer.borrowElement(date, elementReference, this);
+		Optional<Book> element = this.observer.borrowElement(date, elementReference, this);
 		if (element.isPresent()) {
 			this.elements.add(element.get());
 			return true;
@@ -200,7 +207,7 @@ public class User extends UnicastRemoteObject implements Client {
 	 * @param element the element to release
 	 * @return true if the element is released, false otherwise
 	 */
-	public boolean releaseElement(Element element) throws RemoteException {
+	public boolean releaseElement(Book element) throws RemoteException {
 		Objects.requireNonNull(element);
 		if (this.elements.remove(element)) {
 			this.observer.releaseElement(element);
@@ -319,7 +326,7 @@ public class User extends UnicastRemoteObject implements Client {
 		sb.append(this.firstname).append(' ').append(this.surname);
 		sb.append("\nBooks :\n"); 
 		
-		for (Element element : elements) {
+		for (Book element : elements) {
 			try {
 				sb.append(element.getInfo()).append('\n');
 			} catch (RemoteException e) {

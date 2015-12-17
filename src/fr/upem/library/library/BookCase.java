@@ -1,16 +1,27 @@
+package fr.upem.library.library;
+
 
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.Queue;
+import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
+
+import fr.upem.library.client.Client;
+import fr.upem.library.element.BookManager;
+import fr.upem.library.element.Comment;
+import fr.upem.library.element.Book;
+import fr.upem.library.element.ElementManager;
+import fr.upem.library.reference.ElementReference;
 
 
 
 // la librairie au sens propre du terme
-public class Library {
+public class BookCase {
 	
 	private final ConcurrentHashMap<ElementReference, ElementManager> elements = new ConcurrentHashMap<>();
 	
@@ -36,7 +47,7 @@ public class Library {
 	 * @param element the element to add
 	 * @throws RemoteException 
 	 */
-	void addElement(Element element) throws RemoteException {
+	void addElement(Book element) throws RemoteException {
 		Objects.requireNonNull(element);
 		addElement(System.currentTimeMillis(), element);
 	}
@@ -47,7 +58,7 @@ public class Library {
 	 * @param element the element to add
 	 * @throws RemoteException 
 	 */
-	void addElement(long date, Element element) throws RemoteException {
+	void addElement(long date, Book element) throws RemoteException {
 		if (date < 0) {
 			throw new IllegalArgumentException("date : " + date + " is negative");
 		}
@@ -65,7 +76,7 @@ public class Library {
 	 * @param element the element to remove
 	 * @throws RemoteException 
 	 */
-	void removeElement(Element element) throws RemoteException {
+	void removeElement(Book element) throws RemoteException {
 		Objects.requireNonNull(element);
 		ElementReference elementReference = element.getReference();
 		ElementManager elementManager = this.elements.get(elementReference);
@@ -115,7 +126,7 @@ public class Library {
 	 * @throws IllegalArgumentException
 	 * @throws RemoteException 
 	 */
-	Optional<Element> borrowElement(ElementReference elementReference, Client user) throws IllegalArgumentException, RemoteException{
+	Optional<Book> borrowElement(ElementReference elementReference, Client user) throws IllegalArgumentException, RemoteException{
 		Objects.requireNonNull(elementReference);
 		Objects.requireNonNull(user);
 		ElementManager elementManager = this.elements.get(elementReference); // must always be non null 
@@ -134,7 +145,7 @@ public class Library {
 	 * @throws RemoteException 
 	 * @throws IllegalArgumentException
 	 */
-	Optional<Element> borrowElement(long date, ElementReference elementReference, Client user) throws RemoteException {
+	Optional<Book> borrowElement(long date, ElementReference elementReference, Client user) throws RemoteException {
 		Objects.requireNonNull(elementReference);
 		Objects.requireNonNull(user);
 		ElementManager elementManager = this.elements.get(elementReference); // must always be non null 
@@ -149,7 +160,7 @@ public class Library {
 	 * @param element the element to release
 	 * @throws RemoteException 
 	 */
-	void releaseElement(Element element) throws RemoteException {
+	void releaseElement(Book element) throws RemoteException {
 		Objects.requireNonNull(element);
 		ElementReference elementReference = element.getReference();
 		ElementManager elementManager = this.elements.get(elementReference); 
@@ -202,8 +213,8 @@ public class Library {
 	 * @return a list of buyable elements
 	 * @throws RemoteException 
 	 */
-	List<Element> buyableElements() throws RemoteException {
-		List<Element> buyableElements = new ArrayList<Element>();
+	List<Book> buyableElements() throws RemoteException {
+		List<Book> buyableElements = new ArrayList<Book>();
 		for (ElementReference elementReference : this.elements.keySet()) {
 			ElementManager elementManager = this.elements.get(elementReference);
 			elementManager.getListOfBuyableElements().forEach(element -> buyableElements.add(element));
@@ -216,8 +227,8 @@ public class Library {
 	 * @return a list of available elements
 	 * @throws RemoteException 
 	 */
-	List<Element> availableElements() throws RemoteException { // might be useless
-		List<Element> availableElements = new ArrayList<Element>();
+	List<Book> availableElements() throws RemoteException { // might be useless
+		List<Book> availableElements = new ArrayList<Book>();
 		for (ElementReference elementReference : this.elements.keySet()) {
 			ElementManager elementManager = this.elements.get(elementReference);
 			elementManager.getListOfAvailableElements().forEach(element -> availableElements.add(element));
@@ -270,6 +281,14 @@ public class Library {
 			sb.delete(size - 1, size);
 		}
 		return sb.toString();
+	}
+
+	public Queue<Comment> getComments(ElementReference reference) throws RemoteException {
+		ElementManager elementManager =  this.elements.get(reference);
+		if (elementManager != null) {
+			return elementManager.getComments();
+		}
+		return new ArrayBlockingQueue<>(1);
 	}
 
 }
