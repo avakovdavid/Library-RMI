@@ -2,6 +2,7 @@ package fr.upem.library.element;
 
 
 
+import java.io.Serializable;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.List;
@@ -14,7 +15,7 @@ import fr.upem.library.client.Client;
 import fr.upem.library.reference.ElementReference;
 
 
-public class BookManager implements ElementManager {
+public class BookManager implements ElementManager, Serializable {
 	
 	private ArrayList<Book> elements = new ArrayList<>();
 	private ArrayBlockingQueue<Client> users = new ArrayBlockingQueue<>(10); // limited to 10 users

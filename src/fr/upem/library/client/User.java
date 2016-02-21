@@ -10,7 +10,9 @@ import java.util.Optional;
 
 import fr.upem.library.element.Comment;
 import fr.upem.library.element.Book;
+import fr.upem.library.library.BookCase;
 import fr.upem.library.library.Library;
+import fr.upem.library.library.LibraryManager;
 import fr.upem.library.reference.ElementReference;
 
 
@@ -30,11 +32,12 @@ public class User implements Client, Serializable {
 	private String currency;
 	
 	private final ArrayList<Book> elements = new ArrayList<>();
-	private final Library observer;
+	private final BookCase observer;
 	
 	
-	private User(long bankAccountId, String currency, String surname, String firstname, String email, String password, Library observer) throws RemoteException {
+	private User(long bankAccountId, String currency, String surname, String firstname, String email, String password, BookCase observer) throws RemoteException {
 		super();
+		Objects.requireNonNull(observer);
 		this.bankAccountId = bankAccountId;
 		this.surname = Objects.requireNonNull(surname);
 		this.firstname = Objects.requireNonNull(firstname);
@@ -55,11 +58,12 @@ public class User implements Client, Serializable {
 	 * @param observer the service to subscribe to
 	 * @return a new user
 	 */
-	public static User create(long bankAccountId, String currency, String surname, String firstname, String email, String password, Library observer) throws RemoteException {
+	public static User create(long bankAccountId, String currency, String surname, String firstname, String email, String password, LibraryManager observer) throws RemoteException {
 		if (bankAccountId <= 0) {
 			throw new IllegalArgumentException("The account number is negative");
 		}
-		User user = new User(bankAccountId, currency, surname, firstname, email, password, observer);
+		Objects.requireNonNull(observer);
+		User user = new User(bankAccountId, currency, surname, firstname, email, password, observer.getLibrary());
 		observer.subscribe(user);
 		return user;
 	}

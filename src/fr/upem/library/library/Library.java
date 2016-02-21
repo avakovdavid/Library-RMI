@@ -15,7 +15,7 @@ import fr.upem.library.reference.ElementReference;
 
 
 
-public class Library implements LibraryObserver, LibraryManager {
+public class Library implements LibraryManager {
 
 	/**
 	 * The library that contains books
@@ -58,12 +58,12 @@ public class Library implements LibraryObserver, LibraryManager {
 	}
 	
 	@Override
-	public void subscribe(Client user) {
+	public void subscribe(Client user) throws RemoteException {
 		this.users.add(user);
 	}
 
 	@Override
-	public void unsubscribe(Client user) {
+	public void unsubscribe(Client user) throws RemoteException {
 		this.users.remove(user);
 	}
 
@@ -218,6 +218,16 @@ public class Library implements LibraryObserver, LibraryManager {
 	@Override
 	public String display() throws RemoteException {
 		return this.library.toString();
+	}
+
+	@Override
+	public void clear() throws RemoteException {
+		this.library.clear();
+	}
+
+	@Override
+	public BookCase getLibrary() throws RemoteException {
+		return this.library;
 	}
 
 

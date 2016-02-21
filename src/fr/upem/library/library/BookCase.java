@@ -1,6 +1,7 @@
 package fr.upem.library.library;
 
 
+import java.io.Serializable;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.List;
@@ -21,7 +22,7 @@ import fr.upem.library.reference.ElementReference;
 
 
 // la librairie au sens propre du terme
-public class BookCase {
+public class BookCase implements Serializable {
 	
 	private final ConcurrentHashMap<ElementReference, ElementManager> elements = new ConcurrentHashMap<>();
 	
@@ -145,7 +146,7 @@ public class BookCase {
 	 * @throws RemoteException 
 	 * @throws IllegalArgumentException
 	 */
-	Optional<Book> borrowElement(long date, ElementReference elementReference, Client user) throws RemoteException {
+	public Optional<Book> borrowElement(long date, ElementReference elementReference, Client user) throws RemoteException {
 		Objects.requireNonNull(elementReference);
 		Objects.requireNonNull(user);
 		ElementManager elementManager = this.elements.get(elementReference); // must always be non null 
@@ -160,7 +161,7 @@ public class BookCase {
 	 * @param element the element to release
 	 * @throws RemoteException 
 	 */
-	void releaseElement(Book element) throws RemoteException {
+	public void releaseElement(Book element) throws RemoteException {
 		Objects.requireNonNull(element);
 		ElementReference elementReference = element.getReference();
 		ElementManager elementManager = this.elements.get(elementReference); 
@@ -191,7 +192,7 @@ public class BookCase {
 	 * @param comment the comment to add
 	 * @throws RemoteException 
 	 */
-	void commentElement(ElementReference elementReference, Comment comment) throws RemoteException {
+	public void commentElement(ElementReference elementReference, Comment comment) throws RemoteException {
 		Objects.requireNonNull(elementReference);
 		Objects.requireNonNull(comment);
 		ElementManager elementManager = this.elements.get(elementReference);
@@ -283,12 +284,25 @@ public class BookCase {
 		return sb.toString();
 	}
 
+	/**
+	 * Returns all the comments for the specified reference
+	 * @param reference
+	 * @return a queue of all comments
+	 * @throws RemoteException
+	 */
 	public Queue<Comment> getComments(ElementReference reference) throws RemoteException {
 		ElementManager elementManager =  this.elements.get(reference);
 		if (elementManager != null) {
 			return elementManager.getComments();
 		}
 		return new ArrayBlockingQueue<>(1);
+	}
+
+	/**
+	 * Clears the library
+	 */
+	public void clear() {
+		this.elements.clear();
 	}
 
 }

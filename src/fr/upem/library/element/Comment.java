@@ -1,6 +1,7 @@
 package fr.upem.library.element;
 
 
+import java.io.Serializable;
 import java.rmi.RemoteException;
 import java.util.Date;
 import java.util.Objects;
@@ -9,7 +10,7 @@ import java.util.Optional;
 import fr.upem.library.client.Client;
 
 
-public class Comment {
+public class Comment implements Serializable {
 	
 	private final Date date; 
 	private final String content;
